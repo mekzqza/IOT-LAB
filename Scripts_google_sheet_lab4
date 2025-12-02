@@ -1,0 +1,23 @@
+function doGet(e) {
+  // เปิด Google Sheet
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+ 
+  // รับค่าจาก URL Parameters
+  var temp = e.parameter.temp; // ค่าอุณหภูมิ
+  var humi = e.parameter.humi; // ค่าความชื้น
+ 
+  // สร้างข้อมูลใหม่เพื่อเพิ่มในแถวถัดไป
+  var rowData = [new Date(), temp, humi];
+ 
+  // เพิ่มข้อมูลลงในแถวใหม่
+  sheet.appendRow(rowData);
+ 
+  // ส่งการตอบกลับ
+  return ContentService.createTextOutput(JSON.stringify({state: "success"}))
+                       .setMimeType(ContentService.MimeType.JSON);
+}
+
+
+// https://script.google.com/macros/s/AKfycbwK35jfIaW1g9fUN4tDz75Lm4WHMxsm9gzCue-_ldHE7SiNueFOH4kTi5gNEYcl6--ndQ/exec
+
+//เอาไว้ทดสอบ https://script.google.com/macros/s/AKfycbwK35jfIaW1g9fUN4tDz75Lm4WHMxsm9gzCue-_ldHE7SiNueFOH4kTi5gNEYcl6--ndQ/exec?temp=25.6&humi=60.5
