@@ -1,0 +1,43 @@
+function doPost(e) {
+  try {
+    if (!e.postData) {
+      return ContentService.createTextOutput("No data received")
+        .setMimeType(ContentService.MimeType.TEXT);
+    }
+
+    // แปลงข้อมูล JSON ที่ส่งมา
+    var data = JSON.parse(e.postData.contents);
+
+    var temp = data.temp || "";
+    var humi = data.humi || "";
+
+    // เวลาปัจจุบัน
+    var now = new Date();
+    var timestamp = Utilities.formatDate(now, Session.getScriptTimeZone(), "yyyy-MM-dd HH:mm:ss");
+
+    // เปิดชีต
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+
+    // ถ้าเป็นแถวแรกให้สร้างหัวตาราง
+    if (sheet.getLastRow() === 0) {
+      sheet.appendRow(["Timestamp", "Temperature", "Humidity"]);
+    }
+
+    // บันทึกข้อมูลลงชีต
+    sheet.appendRow([timestamp, temp, humi]);
+
+    return ContentService.createTextOutput("Data saved")
+      .setMimeType(ContentService.MimeType.TEXT);
+
+  } catch (err) {
+    return ContentService.createTextOutput("Error: " + err)
+      .setMimeType(ContentService.MimeType.TEXT);
+  }
+}
+
+
+//URL ที่เราไว้ ยิง API https://script.google.com/macros/s/AKfycbz85a-L7FJaT1hWzWPWf-rHXsqBjdglcF-2a4xH_UsIQpQfmsYXAoZvQuG51eo_IdNwZw/exec
+
+
+
+
