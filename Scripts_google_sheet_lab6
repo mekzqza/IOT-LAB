@@ -1,0 +1,20 @@
+function doGet(e) {
+  // เปิดใช้งาน Spreadsheet ที่กำลังทำงานอยู่
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+
+
+  // อ่านค่าจากช่อง A1
+  var valueA1 = sheet.getRange('A1').getValue();
+
+
+  // สร้างเนื้อหาที่จะตอบกลับ (Text/Plain)
+  return ContentService.createTextOutput(valueA1.toString())
+         .setMimeType(ContentService.MimeType.TEXT);
+}
+
+//https://script.google.com/macros/s/AKfycbytv9BI8sBorlOnpPVm1dd3liOhV--RnWYr4StZ9S8qgDCOW_3uJa1LL0usLof1IuWmnQ/exec
+
+
+
+//link google sheet
+//https://docs.google.com/spreadsheets/d/1i7XM2Nhzx4jI_NB5Twfk5zb3citfGL1bLj_M3yLFe1U/edit?gid=0#gid=0
