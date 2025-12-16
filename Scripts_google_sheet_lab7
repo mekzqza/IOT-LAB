@@ -1,0 +1,16 @@
+function doGet(e) {
+  // เปิดใช้งาน Spreadsheet ที่กำลังทำงานอยู่
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+
+
+  // อ่านค่าจากช่อง A1
+  var valueA1 = sheet.getRange('B2').getValue();
+
+
+  // สร้างเนื้อหาที่จะตอบกลับ (Text/Plain)
+  return ContentService.createTextOutput(valueA1.toString())
+         .setMimeType(ContentService.MimeType.TEXT);
+}
+
+
+//https://script.google.com/macros/s/AKfycbw0b7-CfCuE2qaJFoQFy3s4LY585MdXBbIv7zcS6uaATxjARjxFiTkBecSo0glJ_i2nEQ/exec
