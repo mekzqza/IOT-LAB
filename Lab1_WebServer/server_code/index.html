@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>IoT Dashboard - RMUTI</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
+        .container { width: 80%; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dashboard แสดงค่าอุณหภูมิและความชื้น</h1>
+        <canvas id="myChart"></canvas>
+    </div>
+
+    <script>
+        // ฟังก์ชันไปดึงข้อมูลจากไฟล์ fetch_data.php
+        async function updateChart() {
+            try {
+                const response = await fetch('fetch_data.php');
+                const data = await response.json();
+
+                // ข้อมูลมันเรียงจาก ใหม่ -> เก่า เราต้องกลับด้านเป็น เก่า -> ใหม่ กราฟถึงจะวิ่งถูกทาง
+                const labels = data.map(item => item.created_at).reverse();
+                const temps = data.map(item => item.temperature).reverse();
+                const hums = data.map(item => item.humidity).reverse();
+
+                // อัปเดตข้อมูลใส่กราฟ
+                myChart.data.labels = labels;
+                myChart.data.datasets[0].data = temps;
+                myChart.data.datasets[1].data = hums;
+                myChart.update();
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        // ตั้งค่ากราฟเริ่มต้น
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'line', // กราฟเส้น
+            data: {
+                labels: [], // เวลา
+                datasets: [
+                    {
+                        label: 'Temperature (°C)',
+                        data: [],
+                        borderColor: 'red',     // สีเส้นแดง
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        tension: 0.4, // ความโค้งของเส้น
+                        fill: true
+                    },
+                    {
+                        label: 'Humidity (%)',
+                        data: [],
+                        borderColor: 'blue',    // สีเส้นน้ำเงิน
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        tension: 0.4,
+                        fill: true
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // สั่งให้ดึงข้อมูลใหม่ทุกๆ 2 วินาที (Real-time)
+        setInterval(updateChart, 2000);
+        
+        // เรียกครั้งแรกทันที
+        updateChart();
+    </script>
+</body>
+</html>
