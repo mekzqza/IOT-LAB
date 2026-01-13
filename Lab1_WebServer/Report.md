@@ -88,3 +88,35 @@
 
 ## 6. สรุปผล
 การทดลองนี้ทำให้เข้าใจกระบวนการทำงานของระบบ IoT ตั้งแต่ต้นน้ำ (Sensor/ESP32) ไปจนถึงปลายน้ำ (Server/Dashboard) โดยสามารถประยุกต์ใช้ **REST API** ในการรับส่งข้อมูล และใช้ **MySQL** ในการจัดเก็บข้อมูลได้อย่างมีประสิทธิภาพ ตามวัตถุประสงค์ของรายวิชา
+
+
+
+วิธีใช้งาน 
+1.เปิด โปรแกรม apache และ mysql ใน xampp แล้วเปิดเว็บเบราว์เซอร์เข้าไปที่ http://localhost/iot_project/index.html  
+2.สร้างData ในbaseapache และตารางในMySQL ดังนี้
+
+[[
+    -- 1. สร้างฐานข้อมูลชื่อ iot_project
+CREATE DATABASE IF NOT EXISTS iot_project;
+
+-- 2. เลือกใช้งานฐานข้อมูลนี้
+USE iot_project;
+
+-- 3. สร้างตารางเก็บข้อมูลชื่อ sensor_data
+CREATE TABLE IF NOT EXISTS sensor_data (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    sensor_name VARCHAR(50),
+    temperature FLOAT,
+    humidity FLOAT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+]]
+3.จากนั้นเข้าไปวางำไฟล์ไว้ใน C:\xampp\htdocs\iot_project ไฟลที่จะวางไว้คือ 
+1. insert_data.php  
+2. fetch_data.php 
+3. index.html
+
+4.เปิดโปรแกรม Arduino IDE ขึ้นมาแล้วทำการอัพโหลดโค้ดลงบอร์ด ESP32
+5.เปิด Serial Monitor ขึ้นมาเพื่อตรวจสอบสถานะการเชื่อมต่อและการส่งข้อมูล
+6.หมุนตัวต้านทานปรับค่าได้ (VR) เพื่อดูการเปลี่ยนแปลงของกราฟบนหน้าเว็บ
